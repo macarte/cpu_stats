@@ -1,8 +1,13 @@
 import pickle
 
-def start_recording(output, start_time, num_cpus):
+VERSION_CPU_PERCENTAGES = "VERSION_CPU_PERCENTAGES" 
+VERSION_CPU_TIMES_PERCENTAGES = "VERSION_CPU_TIMES_PERCENTAGES" 
+
+def start_recording(version, output, start_time, num_cpus):
+    pickle.dump(version, output)
     pickle.dump(start_time, output)
     pickle.dump(num_cpus, output)
+
 
 def write_cpu_stats(output, time_offset, cpu_stats):
     pickle.dump(time_offset, output)
@@ -11,7 +16,10 @@ def write_cpu_stats(output, time_offset, cpu_stats):
 def end_recording(output):
     pass
 
-def start_reading(input):
+def start_reading(version, input):
+    binary_version = pickle.load(input)
+    assert binary_version == version, "binary file is not of the expected format"
+
     start_time = pickle.load(input)
     num_cpus = pickle.load(input)
     return start_time, num_cpus

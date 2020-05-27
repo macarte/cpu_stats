@@ -25,7 +25,8 @@ def run(sample_interval: float, display_interval: float, output: str) -> None:
     num_samples = 0
 
     with open(output, "wb") as cpu_stats:
-        cpu_stat_file.start_recording(output=cpu_stats, start_time=start_time, num_cpus=cpu_count)
+        cpu_stat_file.start_recording(version=cpu_stat_file.VERSION_CPU_PERCENTAGES,
+            output=cpu_stats, start_time=start_time, num_cpus=cpu_count)
 
         try:
             while True:

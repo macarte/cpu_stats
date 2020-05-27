@@ -13,7 +13,7 @@ def format_float_value(val: float) -> str:
 def run(input: str, display_header: bool) -> None:
 
     with open(input, "rb") as cpu_stats_input:
-        start_time, num_cpus = cpu_stat_file.start_reading(cpu_stats_input)
+        start_time, num_cpus = cpu_stat_file.start_reading(version=cpu_stat_file.VERSION_CPU_PERCENTAGES, input=cpu_stats_input)
         num_samples = 0
 
         if display_header:
