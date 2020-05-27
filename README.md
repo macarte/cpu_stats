@@ -24,3 +24,9 @@ step 4) open the jupyter notebook and make sure to load the csv file by changing
 ````
 dataframe = pandas.read_csv("mystats.csv")
 ````
+# TODO
+
+1) determine cost of cpu_stat.py
+2) record user/kernel(sys) splits
+3) monitor pid
+4) spawn process and monitor pid
