@@ -1,6 +1,8 @@
 # cpu_stats
 python files for efficiently capturing multi-core cpu usage
 
+we use the psutil module (documentation: https://psutil.readthedocs.io/en/latest/)
+
 step 1) install dependencies (psutil)
 
 ````
