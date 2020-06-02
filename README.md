@@ -26,9 +26,18 @@ step 4) open the jupyter notebook and make sure to load the csv file by changing
 ````
 dataframe = pandas.read_csv("mystats.csv")
 ````
+
+# NOTES
+1) you can monitor a specific process using the --pid parameter; however this does not break down the usage of each CPU rather the overall usage
+2) estimated overhead for cpu_stat.py (measured on a 12 core osx)
+
+    | Sample rate (seconds) | CPU % / num cores | CPU % |
+    |-----------------------|-------------------|-------|
+    | 0.01                  | 0.3               | 4     |
+    | 0.1                   | 0.035             | 0.45  |
+    | 1                     | 0.01              | 0.1   |
+
 # TODO
 
-1) determine cost of cpu_stat.py
-2) record user/kernel(sys) splits
-3) monitor pid
-4) spawn process and monitor pid
+1) record user/kernel(sys) splits
+2) spawn process and monitor pid
