@@ -32,7 +32,9 @@ def run(sample_interval: float, display_interval: float, output: str, duration: 
         try:
             while duration > 0:
                 if process:
-                    cpu_usage = process.cpu_percent(interval=sample_interval)
+                    overall_cpu_usage = psutil.cpu_percent(interval=sample_interval, percpu=False)
+                    pid_cpu_usage = process.cpu_percent()
+                    cpu_usage = [pid_cpu_usage, overall_cpu_usage]
                 else:
                     cpu_usage = psutil.cpu_percent(interval=sample_interval, percpu=True)
                 sample_time = datetime.datetime.now()
@@ -49,14 +51,15 @@ def run(sample_interval: float, display_interval: float, output: str, duration: 
                         num_bytes = (sys.getsizeof(cpu_usage) * num_samples) / 1_024
 
                         if process:
-                            total = cpu_usage / cpu_count
-                            print(f"{sample_time} [{format_int_value(num_samples)} / {format_float_as_int_value(num_bytes)} KB] {format_float_value(total)} / {format_float_value(cpu_usage)}")
+                            total = pid_cpu_usage / cpu_count
+                            overall = overall_cpu_usage / cpu_count
+                            print(f"{sample_time} [{format_int_value(num_samples)} / {format_float_as_int_value(num_bytes)} KB] pid%:{format_float_value(pid_cpu_usage)} / pid%/{cpu_count}:{format_float_value(total)} (cpu%/{cpu_count}:{format_float_value(overall)})")
                         else:
                             sum = numpy.sum(cpu_usage)
                             total = sum / cpu_count
                             per_cpu_str = ""
                             for i,j in enumerate(cpu_usage): per_cpu_str = f"{per_cpu_str} {format_float_value(j)},"
-                            print(f"{sample_time} [{format_int_value(num_samples)} / {format_float_as_int_value(num_bytes)} KB] {format_float_value(total)} / {format_float_value(sum)} [{per_cpu_str}]")
+                            print(f"{sample_time} [{format_int_value(num_samples)} / {format_float_as_int_value(num_bytes)} KB] cpu%:{format_float_value(sum)} / cpu%/{cpu_count}:{format_float_value(total)} [{per_cpu_str}]")
 
         except KeyboardInterrupt:
             pass
