@@ -16,7 +16,7 @@ def format_float_as_int_value(val: float) -> str:
 def format_int_value(val: int) -> str:
     return str(val).rjust(6)
 
-def run(sample_interval: float, display_interval: float, output: str) -> None:
+def run(sample_interval: float, display_interval: float, output: str, duration: float) -> None:
 
     cpu_count = psutil.cpu_count()
     next_output = 0
@@ -29,10 +29,11 @@ def run(sample_interval: float, display_interval: float, output: str) -> None:
             output=cpu_stats, start_time=start_time, num_cpus=cpu_count)
 
         try:
-            while True:
+            while duration > 0:
                 cpu_usage = psutil.cpu_percent(interval=sample_interval, percpu=True)
                 sample_time = datetime.datetime.now()
                 sample_offset =  sample_time - start_time
+                duration = duration - sample_interval
                 cpu_stat_file.write_cpu_stats(output=cpu_stats, time_offset=sample_offset, cpu_stats=cpu_usage)
                 num_samples = num_samples + 1
 
@@ -55,6 +56,7 @@ def configure_arg_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentPa
     parser.add_argument("--sample", help="sample interval in seconds", required=True, type=float)
     parser.add_argument("--binary_output", help="binary file to save data to", required=True)
     parser.add_argument("--display", help="display interval in seconds", required=False, type=float)
+    parser.add_argument("--duration", help="stop recording after duration (if specified) ", required=False, type=float, default=999_999_999)
     return parser
 
 def parse_args(parser: argparse.ArgumentParser) -> {}:
@@ -62,7 +64,7 @@ def parse_args(parser: argparse.ArgumentParser) -> {}:
 
 def main(parser: argparse.ArgumentParser) -> None:
     args = parse_args(configure_arg_parser(parser))
-    run(sample_interval=args.sample, display_interval=args.display, output=args.binary_output)
+    run(sample_interval=args.sample, display_interval=args.display, output=args.binary_output, duration=args.duration)
 
 if __name__ == "__main__": \
     main(argparse.ArgumentParser)
