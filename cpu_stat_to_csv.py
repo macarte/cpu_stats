@@ -44,7 +44,7 @@ def decode_VERSION_PROCESS_CPU_PERCENTAGE(cpu_stats_input, start_time, num_cpus,
             time_offset, cpu_usage = cpu_stat_file.read_cpu_stats(cpu_stats_input)
             sample_time = start_time + time_offset
 
-            print(f"{sample_time},{time_offset},{num_samples},{format_float_value(cpu_usage[0])},{format_float_value(cpu_usage[1])}")
+            print(f"{sample_time},{time_offset},{num_samples},{format_float_value(cpu_usage[0])},{format_float_value(cpu_usage[1] / num_cpus)}")
             num_samples = num_samples + 1
     except EOFError:
         pass
